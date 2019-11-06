@@ -13,6 +13,14 @@ import java.util.function.Predicate;
 public interface UserService {
 
     /**
+     * Should return a list of first names sorted in descending order
+     *
+     * @param users list of users to extract names from
+     * @return reverse ordered list of first names
+     */
+    List<String> getFirstNamesReverseSorted(List<User> users);
+
+    /**
      * Should sort given list of user by age descending
      * and first name ascending
      *

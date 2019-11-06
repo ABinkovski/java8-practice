@@ -17,6 +17,7 @@ import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
 
+@SuppressWarnings("unchecked")
 public class UserServiceImplTest {
 
     private UserService userService = new UserServiceImpl();
@@ -24,15 +25,28 @@ public class UserServiceImplTest {
     private static final List<Privilege> ALL_PRIVILEGES = asList(Privilege.values());
 
     @Test
-    public void shouldSortUsersByAgeDescAndNameDesc() {
+    public void shouldReturnFirstNamesSortedDesc() {
         final User user1 = new User(1L, "John", "Doe", 26, ALL_PRIVILEGES);
         final User user2 = new User(2L, "Greg", "Smith", 30, ALL_PRIVILEGES);
         final User user3 = new User(3L, "Alex", "Smith", 13, ALL_PRIVILEGES);
 
-        final List<User> sortedUsers =
-                userService.sortByAgeDescAndNameAsc(asList(user1, user2, user3));
+        final List<String> sortedFirstNames =
+            userService.getFirstNamesReverseSorted(asList(user1, user2, user3));
 
-        assertThat(sortedUsers).containsExactly(user2, user1, user3);
+        assertThat(sortedFirstNames).containsExactly("John", "Greg", "Alex");
+    }
+
+    @Test
+    public void shouldSortUsersByAgeDescAndNameAsc() {
+        final User user1 = new User(1L, "John", "Doe", 26, ALL_PRIVILEGES);
+        final User user2 = new User(2L, "Greg", "Smith", 30, ALL_PRIVILEGES);
+        final User user3 = new User(3L, "Alex", "Smith", 13, ALL_PRIVILEGES);
+        final User user4 = new User(4L, "Andrew", "Hopkins", 30, ALL_PRIVILEGES);
+
+        final List<User> sortedUsers =
+                userService.sortByAgeDescAndNameAsc(asList(user1, user2, user3, user4));
+
+        assertThat(sortedUsers).containsExactly(user4, user2, user1, user3);
     }
 
     @Test
@@ -164,9 +178,9 @@ public class UserServiceImplTest {
         final User user2 = new User(2L, "Greg", "Jonson", 30, emptyList());
         final User user3 = new User(3L, "Alex", "Smith", 13, emptyList());
 
-        final String csv = userService.convertTo(asList(user1, user2, user3), "|", User::getLastName);
+        final String csv = userService.convertTo(asList(user1, user2, user3), ",", User::getLastName);
 
-        assertThat(csv).isEqualTo("Doe|Jonson|Smith");
+        assertThat(csv).isEqualTo("Doe,Jonson,Smith");
     }
 
     @Test

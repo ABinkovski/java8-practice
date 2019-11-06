@@ -13,6 +13,11 @@ import java.util.function.Predicate;
 public class UserServiceImpl implements UserService {
 
     @Override
+    public List<String> getFirstNamesReverseSorted(List<User> users) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
     public List<User> sortByAgeDescAndNameAsc(final List<User> users) {
         throw new UnsupportedOperationException("Not implemented");
     }
